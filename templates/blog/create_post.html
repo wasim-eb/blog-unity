@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% block 'title' %}Unity: Create Post{% endblock %}
+
+{% if form.errors %}
+	{{ form.errors }}
+{% endif %}
+
+{% block 'hero' %}
+
+<div class="columns is-centered">
+	<div class="column is-10">
+		<div class="notification is-info is-light">
+		  <strong>Note:</strong> Only those posts will be in the archives whose status has been set to <strong>published</strong>. Your draft posts will be at your profile page. So, whenever you wish to publish them. Just go ahead and set their status to published.
+		</div>
+	</div>
+</div>
+
+<div class="box is-shadowless">
+	<form method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		<div class="columns is-centered">
+			<div class="column is-8	">
+				<h2 class="title is-size-2 has-text-info has-text-centered">Create a Post</h2>
+				<div class="field">
+					<label class="label">{{ form.title.label_tag }}</label>
+					<div class="control">
+						{% render_field form.title class='input is-dark' placeholder='e.g: This post is about ...' %}
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">{{ form.category.label_tag }}</label>
+					<div class="control">
+						{% render_field form.category class='select is-dark' %}
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">{{ form.description.label_tag }}</label>
+					<div class="control">
+						{% render_field form.description class='input is-dark' placeholder='A brief description ...' %}
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">{{ form.header_image.label_tag }}</label>
+					<div class="control">
+						{{ form.header_image }}
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">{{ form.body.label_tag }}</label>
+					<div class="control">
+						{{ form.media }}
+						{{ form.body }}
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">{{ form.status.label_tag }}</label>
+					<div class="control">
+						<div class="select is-dark is-fullwidth">
+						  {{  form.status }}
+						</div>
+					</div>
+				</div><br>
+				<div class="field">
+					<div class="control">
+						<input type="submit" value="Finished" class="button is-rounded is-dark is-medium is-fullwidth has-text-weight-bold">
+					</div>
+				</div>
+			</div>
+		</div>
+	</form><br>
+</div>
+
+{% endblock %}
+

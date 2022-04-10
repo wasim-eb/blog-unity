@@ -1,0 +1,170 @@
+{% extends 'base_with_content.html' %}
+
+{% load static %}
+
+{% load widget_tweaks %}
+{% block 'title' %}Unity: Profile{% endblock %}
+
+{% block 'hero' %}
+	<section class="section">
+		<div class="container">
+			<div class="columns is-centered">
+				<div class="column is-3 pl-6 pt-6">
+					{% if profile.photo %}
+						<figure class="image is-128x128 is-inline-block">
+						 	<img class="" src="{{ profile.photo.url }}">
+						</figure>
+					{% else %}
+						<figure class="image is-128x128 is-inline-block">
+						 	<img src="{% static 'blog/default.jpg' %}">
+						</figure>
+					{% endif %}
+				</div>
+				<div class="column is-8">
+					<div class="content">
+						<h3 class="title is-size-2 has-text-white pt-2">{{ profile.user.username }}</h3>
+						<p class="subtitle">{{ profile.intro|truncatewords:60 }}</p>
+						{% if request.user == profile.user %}
+							<div class="columns is-centered">
+								<div class="column is-6">
+									<a href="{% url 'edit_profile' profile_id=user.profile.id %}" class="button is-rounded is-info is-fullwidth is-inverted">Edit Profile</a>
+								</div>
+								<div class="column is-6">
+									<a href="{% url 'create_post' %}" class="button is-rounded is-info is-fullwidth is-inverted">Add post</a>
+								</div>
+							</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+
+{% block 'content' %}
+
+	<div class="content">
+		<div class="columns is-mobile is-centered">
+			<div class="column is-11">
+				{% if request.user == profile.user %}
+					<h1 class="title has-text-centered has-text-info">Your Published Posts</h1>
+				{% else %}
+					<h1 class="title has-text-centered has-text-info">Other posts by the author</h1>
+				{% endif %}	
+				{% for x in pub_posts %}
+					<div class="box is-shadowless">	
+						<div class="columns is-centered">
+							<div class="column is-3 pl-6 pt-6">
+								{% if x.header_image %}
+									<figure class="image is-156x156 is-inline-block">
+									 	<img class="" src="{{ x.header_image.url }}">
+									</figure>
+								{% else %}
+									<figure class="image is-128x128 is-inline-block">
+									 	<img src="{% static 'blog/de.v1.jpg' %}">
+									</figure>
+								{% endif %}
+							</div>
+							<div class="column is-6">
+								<div class="content">
+									<a href="{% url 'detail' post_id=x.id %}" class="title is-size-2 has-text-info pt-2">{{ x.title }}</a>
+									<p class="help"><i>Dated: {{ x.pub_date }}</i></p>
+									<p class="subtitle">{{ x.description|truncatewords:40 }}</p>
+									{% if request.user == x.author %}
+										<div class="columns is-centered">
+											<div class="column is-6">
+												<a href="{% url 'edit_post' post_id=x.id %}" class="button is-rounded is-info is-fullwidth">Edit Post</a>
+											</div>
+											<div class="column is-6">
+												<a href="{% url 'delete' post_id=x.id %}" class="button is-rounded is-danger is-fullwidth">Delete Post</a>
+											</div>
+										</div>
+									{% endif %}	
+								</div>
+							</div>
+							<div class="column is-3">
+								<div class="content has-text-centered">
+									{% if x.author.profile.photo %}
+										<figure class="image is-128x128 is-inline-block">
+										 	<img src="{{ x.author.profile.photo.url }}">
+										</figure>
+									{% else %}
+										<figure class="image is-inline-block is-128x128">
+										 	<img src="{% static 'blog/default.jpg' %}">
+										</figure>
+									{% endif %}
+									<p class="help has-text-centered"><i>By: {{ x.author.username }}</i></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% empty %}
+					<div class="box is-shadowless">
+						<p class="subtitle has-text-centered">You don't have any published posts.</p>
+					</div>	
+				{% endfor %}			
+			</div>
+		</div><hr><br>
+		<div class="columns is-mobile is-centered">
+			<div class="column is-11">
+				{% if request.user == profile.user %}	
+					<h1 class="title has-text-centered has-text-info">Your Draft Posts</h1>
+					{% for x in d_posts %}
+						<div class="box is-shadowless">	
+							<div class="columns is-centered">
+								<div class="column is-3 pl-6 pt-6">
+									{% if x.header_image %}
+										<figure class="image is-156x156">
+										 	<img class="" src="{{ x.header_image.url }}">
+										</figure>
+									{% else %}
+										<figure class="image is-128x128 is-inline-block">
+										 	<img src="{% static 'blog/de.v1.jpg' %}">
+										</figure>
+									{% endif %}
+								</div>
+								<div class="column is-6">
+									<div class="content">
+										<a href="{% url 'detail' post_id=x.id %}" class="title is-size-2 has-text-info pt-2">{{ x.title }}</a>
+										<p class="help"><i>Dated: {{ x.pub_date }}</i></p>
+										<p class="subtitle">{{ x.description|truncatewords:40 }}</p>
+										{% if request.user == x.author %}
+										<div class="columns is-centered">
+											<div class="column is-6">
+												<a href="{% url 'edit_post' post_id=x.id %}" class="button is-rounded is-info is-fullwidth">Edit Post</a>
+											</div>
+											<div class="column is-6">
+												<a href="{% url 'delete' post_id=x.id %}" class="button is-rounded is-danger is-fullwidth">Delete Post</a>
+											</div>
+										</div>
+									{% endif %}
+									</div>
+								</div>
+								<div class="column is-3">
+									<div class="content has-text-centered">
+										{% if x.author.profile.photo %}
+											<figure class="image is-128x128 is-inline-block">
+											 	<img src="{{ x.author.profile.photo.url }}">
+											</figure>
+										{% else %}
+											<figure class="image is-128x128">
+											 	<img src="{% static 'blog/default.jpg' %}">
+											</figure>
+										{% endif %}
+										<p class="help has-text-centered"><i>By: {{ x.author }}</i></p>
+									</div>
+								</div>
+							</div>	
+						</div>
+					{% empty %}
+							<div class="box is-shadowless">
+								<p class="subtitle has-text-centered">You don't have any draft posts.</p>
+							</div>
+					{% endfor %}
+				{% endif %}				
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+

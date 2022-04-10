@@ -1,0 +1,88 @@
+{% extends 'base_with_content.html' %}
+
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block 'title' %}Unity: Search results{% endblock %}
+
+{% block 'hero' %}
+
+	<section class="section">
+		<div class="container">
+			<div class="columns is-centered has-text-centered mt-5">
+				<div class="column is-5">
+					{% if searched %}
+					{% with posts.count as results  %}
+						<h2 class="title has-text-weight-bold is-size-2">Search results for '{{ searched }}'</h2>
+					{% endwith %}
+					{% else %}
+						<h2 class="title has-text-weight-bold is-size-2">Search the archives</h2>
+					{% endif %}
+				</div>
+			</div>
+			<div class="columns is-centered">
+				<div class="column is-6">
+					<form action="{% url 'search' %}">
+						<div class="columns is-centered">
+							<div class="column is-7">
+								<input class="input is-info" name="searched" type="text" placeholder="Search">
+							</div>
+							<div class="column is-2">
+								<input type="submit" class="button is-rounded is-info is-fullwidth is-inverted" value="Search">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+
+{% endblock %}
+
+{% block 'content' %}
+
+	{% if posts %}
+		{% for post in posts %}
+			<div class="columns is-centered">
+				<div class="column is-3">
+					{% if post.header_image %}
+						<figure class="image is-156x156 is-inline-block">
+						 	<img class="" src="{{ post.header_image.url }}">
+						</figure>
+					{% else %}
+						<figure class="image is-156x156 is-inline-block">
+						 	<img src="{% static 'blog/de.v1.jpg' %}">
+						</figure>
+					{% endif %}
+				</div>
+				<div class="column is-7">
+					<div class="content">
+						<div class="content has-text-info">
+							<a href="{% url 'detail' post_id=post.id %}"><span class="title has-text-info is-size-4">{{ post.title }}</span></a>
+						</div>
+						<p>{{ post.body|truncatewords:90 }}</p>
+					</div>
+				</div>
+				<div class="column is-2">
+					<a href="{% url 'user_page' profile_id=post.author.profile.id %}">
+						{% if post.author.profile.photo %}
+							<figure class="image is-inline-block">
+							 	<img class="is-96x96" src="{{ post.author.profile.photo.url }}">
+							</figure>
+						{% else %}
+							<figure class="image is-inline-block">
+							 	<img src="{% static 'blog/default.jpg' %}">
+							</figure>
+						{% endif %}
+					</a>
+					<div class="content has-text-centered">
+						<a href="{% url 'user_page' profile_id=post.author.profile.id %}">By {{ post.author.username }}</a>
+						<p class="help">{{ post.pub_date }}</p>
+					</div>
+				</div>
+			</div><hr>
+		{% endfor %}
+	{% endif %}
+
+{% endblock %}

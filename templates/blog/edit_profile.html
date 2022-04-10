@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% block 'title' %}Unity: Edit Profile{% endblock %}
+
+{% if form.errors %}
+	{{ form.errors }}
+{% endif %}
+
+{% block 'hero' %}
+
+<div class="box is-shadowless">
+	<form method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		<div class="columns is-centered">
+			<div class="column is-8">
+				<h2 class="title is-size-2 has-text-info has-text-centered">Edit Profile</h2>
+				<div class="field">
+					<label class="label">{{ form.first_name.label_tag }}</label>
+					<div class="control">
+						{% render_field form.first_name class='input is-info' placeholder='e.g: Abdullah' %}
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">{{ form.last_name.label_tag }}</label>
+					<div class="control">
+						{% render_field form.last_name class='input is-info' placeholder='e.g: Atif Rauf' %}
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">Profile picture:</label>
+					<div class="control">
+						{{ form.photo }}
+					</div>
+				</div><br>
+				<div class="field">
+					<label class="label">{{ form.location.label_tag }}</label>
+					<div class="control">
+						{% render_field form.location class='input is-info' placeholder='e.g: Lahore, Pakistan' %}
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">{{ form.birth_date.label_tag }}</label>
+					<div class="control">
+						{% render_field form.birth_date class='input is-info' placeholder='e.g: YYYY-MM-DD' %}
+					</div>
+					<div class="help has-text-danger">
+						<p><em>Please follow the format YYYY-MM-DD</em></p>
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">{{ form.intro.label_tag }}</label>
+					<div class="control">
+						{% render_field form.intro class='textarea is-small is-info' placeholder='e.g: Hello world' %}
+					</div>
+					<div class="help has-text-danger">
+						<p><em>Please keep it brief</em></p>
+					</div><br>
+				</div>
+				<div class="field">
+					<div class="control">
+						<input type="submit" value="Finish editing" class="button is-rounded is-info is-medium is-fullwidth has-text-weight-bold">
+					</div>
+				</div>
+			</div>
+		</div>
+	</form><br>
+</div>
+
+{% endblock %}
+

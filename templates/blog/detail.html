@@ -1,0 +1,144 @@
+{% extends 'base_with_content.html' %}
+
+{% load static %}
+
+{% load widget_tweaks %}
+{% block 'title' %}{{ post.title }}{% endblock %}
+
+{% block 'content' %}
+	<div class="content">
+		<div class="columns is-centered">
+			<div class="column is-7">
+				<h2 class="title has-text-centered is-size-2 has-text-info"><em>{{ post.title }}</em></h2>
+				<p class="is-size-6 has-text-centered">Dated: {{ post.pub_date }}</p>
+				{% if request.user == post.author %}
+					<div class="buttons is-centered">
+					  <a href="{% url 'edit_post' post_id=post.id %}" class="button is-rounded is-info">Edit Post</a>
+					  <a href="{% url 'delete' post_id=post.id %}" class="button is-rounded is-danger">Delete Post</a>
+					</div>
+				{% endif %}	
+				<hr>
+				<div class="columns has-text-centered is-centered">
+					<div class="column">
+						{% if post.header_image %}
+							<img src="{{ post.header_image.url }}">
+						{% else %}
+							<img src="{% static 'blog/de.v1.jpg' %}">
+						{% endif %}
+					</div>
+				</div><hr>
+				{{ post.body|safe }}
+			</div>
+			<div class="column is-3 has-background-light">
+				<div class="box">
+					<div class="columns is-vcentered">
+						<div class="column has-text-centered">
+							{% if post.author.profile.photo %}
+								<figure class="image is-128x128 is-inline-block">
+								  <img src="{{ post.author.profile.photo.url }}">
+								</figure>
+							{% else %}
+								<figure class="image is-128x128 is-inline-block">
+								 	<img src="{% static 'blog/default.jpg' %}">
+								</figure>
+							{% endif %}	
+						</div>
+					</div>
+					<div class="columns is-centered has-text-centered">
+						<div class="column has-text-centered">
+							<a href="{% url 'user_page' profile_id=post.author.profile.id %}" class="has-text-info">By: {{ post.author }}</a>
+						</div>
+					</div><hr>
+					<div class="columns is-centered">
+						<div class="column">
+							<table class="table is-narrow is-hoverable">
+							  <tbody>
+							    <tr>
+							      <th>Email</th>
+							      <td>{{ post.author.email }}</td>
+							    </tr>
+							    <tr>
+							      <th>Location</th>
+							      <td>{{ post.author.profile.location }}</td>
+							    </tr>
+							    <tr>
+							      <th>Date of Birth</th>
+							      <td>{{ post.author.profile.birth_date }}</td>
+							    </tr>
+							  </tbody>
+							</table>
+						</div>
+					</div><hr>
+					<div class="columns is-centered">
+						<div class="column">
+							<h5 class="title is-size-4">Other Posts by {{ post.author.username }}</h5>
+							<ul>
+								{% for x in user_posts %}
+									<li><a class="has-text-info" href="{% url 'detail' post_id=x.id %}">{{ x.title }}</a></li>
+								{% empty %}
+									<p class="is-size-6">The author has not made other posts yet.</p>
+								{% endfor %}
+							</ul>
+						</div>
+					</div><hr>
+					<div class="columns is-centered">
+						<div class="column">
+							{% with comments.count as total_comments %}
+								<h3 class="title has-text-weight-semibold is-size-4 has-text-centered">
+									{{ total_comments }} Comment{{ total_comments|pluralize }}
+								</h3>
+							{% endwith %}	
+							<form method="POST">
+								{% csrf_token %}
+								<div class="field">
+									<label class="label has-text-weight-light">Add a comment</label>
+									<div class="control">
+										{% render_field form.body class='input is-info' placeholder='e.g: Very nice' %}
+									</div>
+								</div><br>
+								<div class="field">
+									<div class="control">
+										<input type="submit" value="Add Comment" class="button is-rounded is-info is-fullwidth has-text-weight-semibold">
+									</div>
+								</div>
+							</form><hr>
+							{% if comments %}
+								<div class="content">
+									{% for x in comments %}
+										<div class="box is-shadowless">
+											<div class="columns is-centered">
+												<div class="column is-4">
+													{% if x.comment_by.profile.photo %}
+														<figure class="image is-32x32 is-inline-block">
+														 	<a href="{% url 'user_page' profile_id=x.comment_by.profile.id %}">
+														 		<img src="{{ x.comment_by.profile.photo.url }}">
+														 	</a>
+														</figure>
+													{% else %}
+														<figure class="image is-inline-block is-32x32">
+															<a href="{% url 'user_page' profile_id=x.comment_by.profile.id %}">
+														 		<img src="{% static 'blog/default.jpg' %}">
+														 	</a>	
+														</figure>
+													{% endif %}
+												</div>
+												<div class="column is-8 pl-3">
+													<p class="subtitle"><a href="{% url 'user_page' profile_id=x.comment_by.profile.id %}">
+														{{ x.comment_by }}
+													</a></p>
+													<p>{{ x.body }}</p>
+												</div>
+											</div>
+										</div><hr>
+									{% endfor %}
+								</div>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+

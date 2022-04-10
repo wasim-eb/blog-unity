@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+
+{% block 'title' %}Logged Out{% endblock %}
+
+{% block 'hero' %}
+
+<div class="box is-shadowless has-background-light">
+	<div class="content has-text-centered">
+		<h1 class="title is-size-2 has-text-dark">You have logged out successfully !</h1>
+		<p class="is-size-4">Would you like to <a class="has-text-info" href="{% url 'login' %}">login again?</a> Or should we take you to the <a class="has-text-info" href="{% url 'index' %}">home page?</a></p>
+		<p class="is-size-4"></p>
+	</div>
+</div>
+
+{% endblock %}

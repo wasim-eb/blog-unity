@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% load widget_tweaks %}
+{% block 'title' %}Unity: Signup{% endblock %}
+
+{% if form.errors %}
+	{{ form.errors }}
+{% endif %}
+
+{% block 'hero' %}
+
+<div class="box is-shadowless">
+	<form method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		<div class="columns is-centered">
+			<div class="column is-8">
+				<h2 class="title is-size-2 has-text-info has-text-centered">Signup</h2>
+				<div class="field">
+					<label class="label">{{ form1.username.label_tag }}</label>
+					<div class="control">
+						{% render_field form1.username class='input is-info' placeholder='e.g: Abdullah907' %}	
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">{{ form1.password1.label_tag }}</label>
+					<div class="control">
+						{% render_field form1.password1 class='input is-info' placeholder='..........' %}
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">{{ form1.password2.label_tag }}</label>
+					<div class="control">
+						{% render_field form1.password2 class='input is-info' placeholder='..........' %}
+					</div>
+				</div><br>
+				<h2 class="title is-size-3 has-text-info has-text-centered">Personal Info</h2>
+				<div class="field">
+					<label class="label">{{ form1.email.label_tag }}</label>
+					<div class="control">
+						{% render_field form1.email class='input is-info' placeholder='e.g: abc123@example.com' %}
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">Profile picture:</label>
+					<div class="control">
+						{{ form2.photo }}
+					</div>
+				</div><br>
+				<div class="field">
+					<label class="label">{{ form2.location.label_tag }}</label>
+					<div class="control">
+						{% render_field form2.location class='input is-info' placeholder='e.g: Lahore, Pakistan' %}
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">{{ form2.birth_date.label_tag }}</label>
+					<div class="control">
+						{% render_field form2.birth_date class='input is-info' placeholder='e.g: YYYY-MM-DD' %}
+					</div>
+					<div class="help has-text-danger">
+						<p><em>Please follow the format YYYY-MM-DD</em></p>
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">{{ form2.intro.label_tag }}</label>
+					<div class="control">
+						{% render_field form2.intro class='textarea is-small is-info' placeholder='e.g: Hello world' %}
+					</div>
+					<div class="help has-text-danger">
+						<p><em>Please keep it brief</em></p>
+					</div><br>
+				</div>
+				<div class="field">
+					<div class="control">
+						<input type="submit" value="Start Your Membership" class="button is-rounded is-info is-medium is-fullwidth has-text-weight-bold">
+					</div>
+				</div>
+			</div>
+		</div>
+	</form><br>
+</div>
+
+{% endblock %}
+
