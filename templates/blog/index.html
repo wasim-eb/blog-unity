@@ -1,0 +1,119 @@
+{% extends 'base_with_content.html' %}
+{% load widget_tweaks %}
+{% load static %}
+
+{% block 'title' %}Unity{% endblock %}
+
+{% block 'hero' %}
+	<section class="section">
+		<div class="container">
+			<div class="columns  mt-6">
+				<div class="column is-6">
+					<img src="{% static 'blog/de.v1.jpg' %}">
+				</div>
+				<div class="column is-6">
+					<div class="box is-shadowless">
+						<div class="content">
+							<a href="{% url 'detail' post_id=featured_post.id %}">
+								<h3 class="title is-size-3 has-text-info has-text-weight-semibold">
+									{{ featured_post.title }}
+								</h3>
+							</a>
+							<p class="help is-italic">{{ featured_post.pub_date }}</p>
+							<p class="is-italic has-text-weight-semibold">Featured Post</p>
+						</div><hr>
+						<div class="columns">
+							<div class="column">
+								<div class="content">
+									<p>
+										{{ featured_post.body|truncatewords:50 }}
+										<span><a class="has-text-info" href="{% url 'detail' post_id=featured_post.id %}"><em>Read More.</em></a></span>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+
+{% block 'content' %}
+
+		<div class="container has-text-centered">
+			<form method="post">
+				{% csrf_token %}
+				<div class="field">
+					<div class="control">
+						<span class="subtitle is-size-5">Select Category:</span>
+						<span class="ml-3 mr-3">{% render_field form.ctgry class='select is-info is-small' %}</span>
+						<span><button type="submit" class="button is-rounded is-small is-info is-outlined">Select</button></span>
+					</div>
+				</div>
+			</form>
+		</div>
+	
+		<div class="content">
+		<div class="columns is-mobile is-centered">
+			<div class="column is-11">
+				{% for x in posts %}
+					<div class="box is-shadowless">	
+						<div class="columns is-centered">
+							<div class="column is-3 pl-6 pt-6">
+								{% if x.header_image %}
+									<figure class="image is-156x156 is-inline-block">
+									 	<img class="" src="{{ x.header_image.url }}">
+									</figure>
+								{% else %}
+									<figure class="image is-128x128 is-inline-block">
+									 	<img src="{% static 'blog/de.v1.jpg' %}">
+									</figure>
+								{% endif %}
+							</div>
+							<div class="column is-6">
+								<div class="content">
+									<a href="{% url 'detail' post_id=x.id %}" class="title is-size-2 has-text-weight-semibold has-text-info pt-2">{{ x.title }}</a>
+									<p class="help"><i>Dated: {{ x.pub_date }}</i></p>
+									<p class="subtitle">
+										{{ x.description|truncatewords:35 }}
+										<span><a class="has-text-info" href="{% url 'detail' post_id=x.id %}"><em>Read More.</em></a></span>
+									</p>
+								</div>
+							</div>
+							<div class="column is-3">
+								<div class="content has-text-centered">
+									{% if x.author.profile.photo %}
+										<a href="{% url 'user_page' profile_id=x.author.profile.id %}">
+											<figure class="image is-128x128 is-inline-block">
+											 	<img src="{{ x.author.profile.photo.url }}">
+											</figure>
+										</a>	
+									{% else %}
+										<a href="{% url 'user_page' profile_id=x.author.profile.id %}">
+											<figure class="image is-inline-block is-128x128">
+											 	<img src="{% static 'blog/default.jpg' %}">
+											</figure>
+										</a>	
+									{% endif %}
+									<p class="help has-text-centered">
+										<a href="{% url 'user_page' profile_id=x.author.profile.id %}">
+											<i>By: {{ x.author.username }}</i>
+										</a>	
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>	
+				{% endfor %}			
+			</div>
+		</div>
+	</div><hr>
+	<div class="columns has-text-centered is-centered mt-3 mb-1">
+		<h3 class="title is-size-4">
+			Want to read more ?<a class="has-text-info" href="{% url 'archives' %}"> Visit the archives.</a>
+		</h3>
+	</div>
+
+{% endblock %}
+

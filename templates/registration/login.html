@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block 'title' %}Unity: Login{% endblock %}
+
+{% block 'hero' %}
+
+	{% if form.errors %}
+		{{ form.errors }}
+	{% endif %}
+
+
+	<div class="box is-shadowless">
+	<form method="POST">
+		{% csrf_token %}
+		<div class="columns is-centered">
+			<div class="column is-8">
+				<h2 class="title is-size-2 has-text-info has-text-centered">Login</h2>
+				<div class="field">
+					<label class="label">{{ form.username.label_tag }}</label>
+					<div class="control">
+						{% render_field form.username class='input is-info' placeholder='Username' %}	
+					</div>
+				</div>
+				<div class="field">
+					<label class="label">{{ form.password.label_tag }}</label>
+					<div class="control">
+						{% render_field form.password class='input is-info' placeholder='Password' %}
+					</div>
+				</div><br>
+				<div class="field">
+					<div class="control">
+						<input type="submit" value="Login" class="button is-info is-medium is-fullwidth has-text-weight-bold">
+					</div>
+				</div>
+			</div>
+		</div>
+	</form><br>
+</div>
+
+
+{% endblock %}
